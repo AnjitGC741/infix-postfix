@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>infix to postfix</title>
+    <style>
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input type="text" id="inputExpression" />
+      <button onclick="convert();">Convert</button>
+      <p id="msg"></p>
+      <div id="forTable"></div>
+    </form>
+    <script>
+     
+      function convert() {
+        var operatorStackTop = -1;
+        var outputStackTop = -1;
+        var operatorStack = [];
+        var outputStack = [];
+        var infixExpression = document.getElementById("inputExpression").value;
+        if (infixExpression === "") {
+          document.getElementById("msg").innerHTML = "Empty!!";
+          event.preventDefault();
+        }
+        var createTable = document.getElementById("forTable");
+        var table = "<table><thead><tr><th>SN</th><th>Character</th><th>Operator Stack</th><th>Output</th></tr></thead><tbody>";
+         for(let i=0;i<infixExpression.length;i++)
+         {
+            table += "<tr><td>" + (i + 1) + "</td><td>" + infixExpression[i] + "</td><td>" + forOperator(infixExpression[i])+ "</td><td>" + checkOutPutStack() + "</td></tr>";
+         }   
+            table += "</tbody></table>";
+            createTable.innerHTML = table;
+            event.preventDefault();
+            function forOperator(x)
+            {
+                var flag = 0;
+                var checkAlpha = /[A-Za-z]/;
+                if(x.match(checkAlpha))
+                {
+                     forOutput(x);
+                     return checkOperatorStack();
+                }
+                else
+                {
+                    if(x === "{" || x === "(" || x==="[")
+                    {
+                        operatorStackTop++;
+                        operatorStack [operatorStackTop] = x;
+                        return operatorStack.join('');
+                       
+                    }
+                    else if(x === "}" || x === ")" || x==="]")
+                    {
+                        if(x==="}")
+                        {
+                          while(flag === 0)
+                          {
+                            if(operatorStack [operatorStackTop] === "{")
+                            {
+                              operatorStackTop--;
+                              operatorStack.pop();
+                              break;
+                            }
+                            forOutput(operatorStack[operatorStackTop]);
+                          }
+                          return checkOperatorStack();
+                        }
+                        
+                        else if(x === "]")
+                        {
+                          while(flag === 0)
+                          {
+                            if(operatorStack [operatorStackTop] === "[")
+                            {
+                              operatorStackTop--;
+                              operatorStack.pop();
+                              break;
+                            }
+                            forOutput(operatorStack[operatorStackTop]);
+                            
+                          }
+                          return checkOperatorStack();
+                        }
+                        else
+                        {
+                          while(flag === 0)
+                          {
+                            if(operatorStack [operatorStackTop] === "(")
+                            {
+                              operatorStackTop--;
+                              operatorStack.pop();
+                              break;
+                            }
+                      
+                            forOutput(operatorStack[operatorStackTop]);
+                            
+                          }
+                          return checkOperatorStack();
+                        }
+                    }
+                }
+            
+            }
+            function forOutput(value)
+            {
+                outputStackTop++;
+                outputStack[outputStackTop] = value;
+                return true;
+               
+            }
+            function checkOutPutStack()
+            {
+                if(outputStackTop === -1)
+                {
+                    return "-"
+                }
+                else
+                {
+                    return outputStack.join('');
+                }
+            }
+            function checkOperatorStack()
+            {
+                if(operatorStackTop === -1)
+                {
+                    return "-"
+                }
+                else
+                {
+                    return operatorStack.join('');
+                }
+            }
+
+      }
+    </script>
+  </body>
+</html>
