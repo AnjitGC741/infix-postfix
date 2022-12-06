@@ -74,52 +74,112 @@
                     {
                         if(x==="}")
                         {
-                          while(flag === 0)
-                          {
-                            if(operatorStack [operatorStackTop] === "{")
-                            {
-                              operatorStackTop--;
-                              operatorStack.pop();
-                              break;
-                            }
+                          while(operatorStack[operatorStackTop] !== "{")
+                          { 
                             forOutput(operatorStack[operatorStackTop]);
+                            operatorStackTop--;
+                            operatorStack.pop();
                           }
+                          operatorStackTop--;
+                          operatorStack.pop();
                           return checkOperatorStack();
                         }
                         
                         else if(x === "]")
                         {
-                          while(flag === 0)
-                          {
-                            if(operatorStack [operatorStackTop] === "[")
-                            {
-                              operatorStackTop--;
-                              operatorStack.pop();
-                              break;
-                            }
+                          while(operatorStack[operatorStackTop] !== "[")
+                          { 
                             forOutput(operatorStack[operatorStackTop]);
-                            
+                            operatorStackTop--;
+                            operatorStack.pop();
                           }
+                          operatorStackTop--;
+                          operatorStack.pop();
                           return checkOperatorStack();
                         }
                         else
                         {
-                          while(flag === 0)
-                          {
-                            if(operatorStack [operatorStackTop] === "(")
-                            {
-                              operatorStackTop--;
-                              operatorStack.pop();
-                              break;
-                            }
-                      
+                          while(operatorStack[operatorStackTop] !== "(")
+                          { 
                             forOutput(operatorStack[operatorStackTop]);
-                            
+                            operatorStackTop--;
+                            operatorStack.pop();
                           }
+                          operatorStackTop--;
+                          operatorStack.pop();
                           return checkOperatorStack();
                         }
                     }
-                }
+                    else if(x === "^")
+                    {
+                        operatorStackTop++;
+                        operatorStack [operatorStackTop] = x;
+                        return operatorStack.join('');
+                    }
+                    else if(x === "*" || x === "/")
+                    {
+                      if(operatorStack[operatorStackTop] === "^")
+                      {
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                      else if(x === "*"  && (operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/"))
+                      {
+                        while(operatorStackTop !== -1)
+                        {
+                        if(checkBracket() )
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        }
+                        return checkOperatorStack();
+                      }
+                      else if(x === "/"  && (operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/"))
+                      {
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                      else{
+                        operatorStackTop++;
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                    }
+                    else if(x === "+" || x === "-")
+                    {
+                      if(operatorStack[operatorStackTop] === "^" || operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/")
+                      {
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                      else if(x === "+"  && (operatorStack[operatorStackTop] === "+" || operatorStack[operatorStackTop] === "-"))
+                      {
+                        alert("it have entered");
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                      else if(x === "-"  && (operatorStack[operatorStackTop] === "+" || operatorStack[operatorStackTop] === "-"))
+                      {
+                        forOutput(operatorStack[operatorStackTop]);
+                        operatorStack.pop();
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                      else{
+                        operatorStackTop++;
+                        operatorStack [operatorStackTop] = x;
+                        return checkOperatorStack();
+                      }
+                    }
+                  }
             
             }
             function forOutput(value)
@@ -150,6 +210,17 @@
                 {
                     return operatorStack.join('');
                 }
+            }
+            checkBracket()
+            {
+              let bracket = operatorStack[operatorStackTop];
+              if(bracket === "}" || bracket === "]" || bracket === ")" || bracket === "{" || bracket === "[" || bracket ==="(")
+              {
+                return false;
+              }
+              else {
+                return true;
+              }
             }
 
       }
