@@ -112,72 +112,40 @@
                     }
                     else if(x === "^")
                     {
+                        while(checkPrecedence(operatorStack [operatorStackTop]) === 3)
+                        {
+                           forOutput(operatorStack[operatorStackTop]);
+                           operatorStackTop--;
+                           operatorStack.pop();
+                        }
                         operatorStackTop++;
                         operatorStack [operatorStackTop] = x;
                         return operatorStack.join('');
                     }
                     else if(x === "*" || x === "/")
                     {
-                      if(operatorStack[operatorStackTop] === "^")
+                      while(checkPrecedence(operatorStack [operatorStackTop]) >= 2)
                       {
                         forOutput(operatorStack[operatorStackTop]);
+                        operatorStackTop--;
                         operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
                       }
-                      else if(x === "*"  && (operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/"))
-                      {
-                        while(operatorStackTop !== -1)
-                        {
-                        if(checkBracket() )
-                        forOutput(operatorStack[operatorStackTop]);
-                        operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        }
-                        return checkOperatorStack();
-                      }
-                      else if(x === "/"  && (operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/"))
-                      {
-                        forOutput(operatorStack[operatorStackTop]);
-                        operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
-                      }
-                      else{
-                        operatorStackTop++;
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
-                      }
+                      operatorStackTop++;
+                      operatorStack [operatorStackTop] = x;
+                      return operatorStack.join('');
                     }
                     else if(x === "+" || x === "-")
                     {
-                      if(operatorStack[operatorStackTop] === "^" || operatorStack[operatorStackTop] === "*" || operatorStack[operatorStackTop] === "/")
-                      {
-                        forOutput(operatorStack[operatorStackTop]);
-                        operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
-                      }
-                      else if(x === "+"  && (operatorStack[operatorStackTop] === "+" || operatorStack[operatorStackTop] === "-"))
+                      while(checkPrecedence(operatorStack [operatorStackTop]) >= 1)
                       {
                         alert("it have entered");
                         forOutput(operatorStack[operatorStackTop]);
+                        operatorStackTop--;
                         operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
                       }
-                      else if(x === "-"  && (operatorStack[operatorStackTop] === "+" || operatorStack[operatorStackTop] === "-"))
-                      {
-                        forOutput(operatorStack[operatorStackTop]);
-                        operatorStack.pop();
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
-                      }
-                      else{
-                        operatorStackTop++;
-                        operatorStack [operatorStackTop] = x;
-                        return checkOperatorStack();
-                      }
+                      operatorStackTop++;
+                      operatorStack [operatorStackTop] = x;
+                      return operatorStack.join('');
                     }
                   }
             
@@ -220,6 +188,25 @@
               }
               else {
                 return true;
+              }
+            }
+           function checkPrecedence(x)
+            {
+              if(x == "^")
+              {
+                return 3;
+              }
+              else if(x == "*" || x == "/")
+              {
+                return 2;
+              }
+              else if(x == "+" || x == "-")
+              {
+                return 1;
+              }
+              else
+              {
+                return -1;
               }
             }
 
